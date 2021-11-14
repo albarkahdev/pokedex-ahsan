@@ -5,10 +5,17 @@ import apiUtil from '../utilities/apiUtil';
   Dispatcher
 */
 
-function dispatchCurrentPokemons({ pokemons }, dispatch) {
+function dispatchPokemons({ pokemons }, dispatch) {
   dispatch({
-    type: actionTypes.SET_CURRENT_POKEMONS,
+    type: actionTypes.SET_POKEMONS,
     pokemons,
+  });
+}
+
+function dispatchPokemon({ pokemon }, dispatch) {
+  dispatch({
+    type: actionTypes.SET_POKEMON,
+    pokemon,
   });
 }
 
@@ -16,18 +23,23 @@ function dispatchCurrentPokemons({ pokemons }, dispatch) {
   SetterDispatcher
 */
 
-function setCurrentPokemons({ pokemons }, dispatch) {
+function setPokemons({ pokemons }, dispatch) {
   if (!pokemons) return;
 
-  dispatchCurrentPokemons(
+  dispatchPokemons(
     // { pokemons: cloneDeep(pokemons) }, dispatch,
     { pokemons }, dispatch,
   );
 }
 
-/*
-  Helpers
-*/
+function setPokemon({ pokemon }, dispatch) {
+  if (!pokemon) return;
+
+  dispatchPokemons(
+    // { pokemon: cloneDeep(pokemon) }, dispatch,
+    { pokemon }, dispatch,
+  );
+}
 
 /*
   Method
@@ -38,7 +50,7 @@ async function getPokemons(dispatch) {
     const { data: { results }} = await apiUtil.get('/pokemon?limit=10');
     // const { data: { results }} = await apiUtil.get('/pokemon?limit=10&offset=10');
 
-    setCurrentPokemons({ pokemons: results }, dispatch);
+    setPokemons({ pokemons: results }, dispatch);
 
     return results;
   } catch (error) {
@@ -59,5 +71,6 @@ async function getPokemon({ pokemonId }) {
 
 export {
   getPokemons,
-  getPokemon
+  getPokemon,
+  setPokemon,
 };

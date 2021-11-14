@@ -3,6 +3,7 @@ import Reducer from '../reducers/reducer';
 
 export const initialState = {
   pokemons: [],
+  pokemon: {},
 };
 
 const GlobalStateProvider = ({ children }) => {
