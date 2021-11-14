@@ -10,3 +10,39 @@
   align-items: center;
   flex-wrap: wrap;
 }
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  margin: 16px;
+}
+
+.button_load_more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #009ACD;
+  cursor: pointer;
+}
+
+.button_load_more > p {
+  color: white;
+}
+
+.button_load_more_loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #89CFF0
+  ;
+}
+
+.button_load_more_loading > p {
+  color: black;
+}
