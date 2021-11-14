@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect, useCallback } from 'react';
 import { useParams } from "react-router-dom";
-import { PokemonActions } from '../../actions';
+import ImageViewer from 'react-simple-image-viewer';
 
+import { PokemonActions } from '../../actions';
 import { GlobalContext } from '../../contexts/GlobalStateProvider';
 
 import styles from './DetailPage.module.css';
@@ -15,13 +16,13 @@ const Attribute = ({ attribute, value }) => {
   )
 }
 
-const ImagePokemon = ({ src, alt }) => {
+const ImagePokemon = ({ src, alt, onClick }) => {
   if (!src) {
     return null;
   }
 
   return (
-    <div className={styles.images_item}>
+    <div className={styles.images_item} onClick={onClick}>
       <img
         className={styles.images}
         src={src}
@@ -34,6 +35,9 @@ const ImagePokemon = ({ src, alt }) => {
 function DetailPage() {
   const [{ pokemon }, dispatch] = useContext(GlobalContext);
   const [currentPokemon, setCurrentPokemon] = useState({});
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
 
   const params = useParams();
 
@@ -70,6 +74,7 @@ function DetailPage() {
     abilities = abilities?.join(', ');
     let stats = currentPokemon?.stats;
     stats = stats?.map(val => ({ nameStats: val?.stat?.name, baseStats: val?.base_stat }));
+    const sprites = Object.keys(currentPokemon?.sprites || {})?.map(val => (currentPokemon?.sprites?.[val]))?.filter(val => typeof val === "string");
 
     return {
       weight,
@@ -77,10 +82,21 @@ function DetailPage() {
       types,
       abilities,
       stats,
+      sprites,
     }
   }, [currentPokemon]);
 
   const attributePokemon = getAttributePokemon();
+
+  const openImageViewer = useCallback((index) => {
+    setCurrentImage(index);
+    setIsViewerOpen(true);
+  }, []);
+
+  const closeImageViewer = () => {
+    setCurrentImage(0);
+    setIsViewerOpen(false);
+  };
 
   if (currentPokemon === {}) {
     return (
@@ -124,38 +140,25 @@ function DetailPage() {
           <h3>Images</h3>
         </div>
         <div className={styles.images_container}>
-          <ImagePokemon
-            src={currentPokemon?.sprites?.front_default}
-            alt="front_default"
-          />
-          <ImagePokemon
-            src={currentPokemon?.sprites?.front_female}
-            alt="front_female"
-          />
-          <ImagePokemon
-            src={currentPokemon?.sprites?.front_shiny}
-            alt="front_shiny"
-          />
-          <ImagePokemon
-            src={currentPokemon?.sprites?.front_shiny_female}
-            alt="front_shiny_female"
-          />
-          <ImagePokemon
-            src={currentPokemon?.sprites?.back_default}
-            alt="back_default"
-          />
-          <ImagePokemon
-            src={currentPokemon?.sprites?.back_female}
-            alt="back_female"
-          />
-          <ImagePokemon
-            src={currentPokemon?.sprites?.back_shiny}
-            alt="back_shiny"
-          />
-          <ImagePokemon
-            src={currentPokemon?.sprites?.back_shiny_female}
-            alt="back_shiny_female"
-          />
+          {attributePokemon?.sprites?.map((sprite, indexSprite) => {
+            return (
+              <ImagePokemon
+                src={sprite}
+                alt="sprite_image"
+                onClick={() => openImageViewer(indexSprite)}
+              />
+            )
+          })}
+
+          {isViewerOpen && (
+            <ImageViewer
+              src={attributePokemon?.sprites}
+              currentIndex={ currentImage }
+              disableScroll={ false }
+              closeOnClickOutside={ true }
+              onClose={ closeImageViewer }
+            />
+          )}
         </div>
       </div>
     </div>
