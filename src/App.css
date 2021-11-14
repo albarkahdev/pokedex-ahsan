@@ -1,0 +1,25 @@
+.body {
+  margin: 0px;
+  padding: 0px;
+}
+
+p {
+  font-family: 'Lato', sans-serif;
+  margin: 0px;
+  padding: 0px;
+  font-size: 0.9em;
+}
+
+h1 {
+  font-family: 'Lato', sans-serif;
+  margin: 0px;
+  padding: 0px;
+  font-size: 2em;
+}
+
+h3 {
+  font-family: 'Lato', sans-serif;
+  margin: 0px;
+  padding: 0px;
+  font-size: 1.1em;
+}
