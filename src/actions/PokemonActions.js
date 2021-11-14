@@ -5,13 +5,6 @@ import apiUtil from '../utilities/apiUtil';
   Dispatcher
 */
 
-function dispatchPokemons({ pokemons }, dispatch) {
-  dispatch({
-    type: actionTypes.SET_POKEMONS,
-    pokemons,
-  });
-}
-
 function dispatchPokemon({ pokemon }, dispatch) {
   dispatch({
     type: actionTypes.SET_POKEMON,
@@ -19,44 +12,51 @@ function dispatchPokemon({ pokemon }, dispatch) {
   });
 }
 
+function dispatchPokemons({ pokemons }, dispatch) {
+  dispatch({
+    type: actionTypes.SET_POKEMONS,
+    pokemons,
+  });
+}
+
+function dispatchNextPokemonURL({ nextPokemonURL }, dispatch) {
+  dispatch({
+    type: actionTypes.SET_NEXT_POKEMON_URL,
+    nextPokemonURL,
+  });
+}
+
 /*
   SetterDispatcher
 */
-
-function setPokemons({ pokemons }, dispatch) {
-  if (!pokemons) return;
-
-  dispatchPokemons(
-    // { pokemons: cloneDeep(pokemons) }, dispatch,
-    { pokemons }, dispatch,
-  );
-}
 
 function setPokemon({ pokemon }, dispatch) {
   if (!pokemon) return;
 
   dispatchPokemon(
-    // { pokemon: cloneDeep(pokemon) }, dispatch,
     { pokemon }, dispatch,
+  );
+}
+
+function setPokemons({ pokemons }, dispatch) {
+  if (!pokemons) return;
+
+  dispatchPokemons(
+    { pokemons }, dispatch,
+  );
+}
+
+function setNextPokemonURL({ nextPokemonURL }, dispatch) {
+  if (!nextPokemonURL) return;
+
+  dispatchNextPokemonURL(
+    { nextPokemonURL }, dispatch,
   );
 }
 
 /*
   Method
 */
-
-async function getPokemons(dispatch) {
-  try {
-    const { data: { results }} = await apiUtil.get('/pokemon?limit=10');
-    // const { data: { results }} = await apiUtil.get('/pokemon?limit=10&offset=10');
-
-    setPokemons({ pokemons: results }, dispatch);
-
-    return results;
-  } catch (error) {
-    throw error;
-  }
-}
 
 async function getPokemon({ pokemonId }) {
   try {
@@ -68,8 +68,47 @@ async function getPokemon({ pokemonId }) {
   }
 }
 
+async function getPokemons(dispatch) {
+  try {
+    const { data: { results, next }} = await apiUtil.get('/pokemon?limit=10');
+
+    setPokemons({ pokemons: results }, dispatch);
+
+    if (next) {
+      const nextPokemonURL = next.replace(process.env.REACT_APP_BASE_SERVER_URL, '');
+      setNextPokemonURL({ nextPokemonURL }, dispatch);
+    }
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getMorePokemons({ nextPokemonURL, currentPokemons }, dispatch) {
+  try {
+    const resultsReq = await apiUtil.get(nextPokemonURL);
+    const results = resultsReq?.data?.results;
+    const next = resultsReq?.data?.next;
+
+    const mergePokemonList = currentPokemons.concat(results);
+
+    setPokemons({ pokemons: mergePokemonList }, dispatch);
+
+    if (next) {
+      const nextPokemonURL = next.replace(process.env.REACT_APP_BASE_SERVER_URL, '');
+      setNextPokemonURL({ nextPokemonURL }, dispatch);
+    }
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
-  getPokemons,
   getPokemon,
+  getPokemons,
+  getMorePokemons,
   setPokemon,
 };

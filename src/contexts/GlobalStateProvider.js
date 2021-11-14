@@ -2,8 +2,9 @@ import React, { createContext, useReducer } from 'react';
 import Reducer from '../reducers/reducer';
 
 export const initialState = {
-  pokemons: [],
   pokemon: {},
+  pokemons: [],
+  nextPokemonURL: null,
 };
 
 const GlobalStateProvider = ({ children }) => {
