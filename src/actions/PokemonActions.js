@@ -35,11 +35,23 @@ function setCurrentPokemons({ pokemons }, dispatch) {
 
 async function getPokemons(dispatch) {
   try {
-    const { data: { results }} = await apiUtil.get('/pokemon?limit=10&offset=10');
-    const result2 = await apiUtil.get('/pokemon/11/');
-    console.log({ results, result2 });
+    const { data: { results }} = await apiUtil.get('/pokemon?limit=10');
+    // const { data: { results }} = await apiUtil.get('/pokemon?limit=10&offset=10');
 
-    return result2;
+    setCurrentPokemons({ pokemons: results }, dispatch);
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getPokemon({ pokemonId }) {
+  try {
+    const { data } = await apiUtil.get(`/pokemon/${pokemonId}/`);
+    console.log({ data });
+
+    return data;
   } catch (error) {
     throw error;
   }
@@ -47,4 +59,5 @@ async function getPokemons(dispatch) {
 
 export {
   getPokemons,
+  getPokemon
 };
