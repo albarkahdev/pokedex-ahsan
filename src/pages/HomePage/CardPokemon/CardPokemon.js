@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { PokemonActions } from '../../../actions';
 import { GlobalContext } from '../../../contexts/GlobalStateProvider';
-import './CardPokemon.module.css';
+import styles from './CardPokemon.module.css';
 
 const CardPokemon = (props) => {
   const { data } = props;
@@ -41,8 +41,29 @@ const CardPokemon = (props) => {
   }
   
   return (
-    <div onClick={handleShowDetailPokemon}>
-      <p>{pokemon?.name}</p>
+    <div className={styles.card_pokemon} onClick={handleShowDetailPokemon}>
+      <div className={styles.image_container}>
+        <img className={styles.image} src={pokemon?.sprites?.front_default} alt={pokemon?.name} />
+      </div>
+      <div className={styles.description}>
+        <div className={styles.id}>
+          <p>#{pokemon?.id}</p>
+        </div>
+        <div className={styles.name}>
+          <h3>{pokemon?.name}</h3>
+        </div>
+        <div className={styles.types}>
+          {
+            pokemon?.types?.map(type => {
+              return (
+                <div className={styles.type}>
+                  <p>{type?.type?.name}</p>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
     </div>
   );
 };

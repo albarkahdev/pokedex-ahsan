@@ -1,0 +1,12 @@
+.container {
+  padding: 20px 16px;
+  background-color: white;
+}
+
+.cards_container {
+  display: flex;
+  margin-top: 16px;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
