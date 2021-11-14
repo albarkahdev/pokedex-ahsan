@@ -4,7 +4,7 @@ import { handleErrorAPI } from './handleError';
 
 const getInstance = (config) => {
   const instance = axios.create({
-    baseURL: process.env.BASE_CLIENT_URL,
+    baseURL: process.env.SERVER_URL,
     headers: {
       'Content-Type': 'application/json',
     },
