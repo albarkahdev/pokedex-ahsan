@@ -1,11 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { PokemonActions } from '../../../actions';
+import { GlobalContext } from '../../../contexts/GlobalStateProvider';
 import './CardPokemon.module.css';
 
 const CardPokemon = (props) => {
   const { data } = props;
+  const [{}, dispatch] = useContext(GlobalContext);
   const [pokemon, setPokemon] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchApiPokemon = async () => {
@@ -29,9 +34,14 @@ const CardPokemon = (props) => {
 
   fetchApiPokemon();
   }, []);
+
+  const handleShowDetailPokemon = () => {
+    PokemonActions.setPokemon({ pokemon }, dispatch);
+    navigate(`/${pokemon?.id}`);
+  }
   
   return (
-    <div>
+    <div onClick={handleShowDetailPokemon}>
       <p>{pokemon?.name}</p>
     </div>
   );

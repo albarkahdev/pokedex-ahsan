@@ -35,7 +35,7 @@ function setPokemons({ pokemons }, dispatch) {
 function setPokemon({ pokemon }, dispatch) {
   if (!pokemon) return;
 
-  dispatchPokemons(
+  dispatchPokemon(
     // { pokemon: cloneDeep(pokemon) }, dispatch,
     { pokemon }, dispatch,
   );
@@ -61,7 +61,6 @@ async function getPokemons(dispatch) {
 async function getPokemon({ pokemonId }) {
   try {
     const { data } = await apiUtil.get(`/pokemon/${pokemonId}/`);
-    console.log({ data });
 
     return data;
   } catch (error) {
