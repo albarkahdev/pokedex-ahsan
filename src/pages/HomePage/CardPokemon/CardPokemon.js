@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { PokemonActions } from '../../../actions';
 import { GlobalContext } from '../../../contexts/GlobalStateProvider';
 import styles from './CardPokemon.module.css';
 
-const CardPokemon = (props) => {
-  const { data } = props;
+const CardPokemon = ({ data }) => {
   const [{}, dispatch] = useContext(GlobalContext);
   const [pokemon, setPokemon] = useState({});
 
@@ -66,6 +66,10 @@ const CardPokemon = (props) => {
       </div>
     </div>
   );
+};
+
+CardPokemon.propTypes = {
+  data: PropTypes.object.isRequired,
 };
 
 export default CardPokemon;

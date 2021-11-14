@@ -2,35 +2,11 @@ import { useContext, useState, useEffect, useCallback } from 'react';
 import { useParams } from "react-router-dom";
 import ImageViewer from 'react-simple-image-viewer';
 
+import AttributePokemon from './AttributePokemon/AttributePokemon';
+import ImagePokemon from './ImagePokemon/ImagePokemon';
 import { PokemonActions } from '../../actions';
 import { GlobalContext } from '../../contexts/GlobalStateProvider';
-
 import styles from './DetailPage.module.css';
-
-const Attribute = ({ attribute, value }) => {
-  return (
-    <div className={styles.attribute_container}>
-      <p className={styles.attribute}>{attribute}</p>
-      <p className={styles.attribute_value}>{value}</p>
-    </div>
-  )
-}
-
-const ImagePokemon = ({ src, alt, onClick }) => {
-  if (!src) {
-    return null;
-  }
-
-  return (
-    <div className={styles.images_item} onClick={onClick}>
-      <img
-        className={styles.images}
-        src={src}
-        alt={alt}
-      />
-    </div>
-  )
-}
 
 function DetailPage() {
   const [{ pokemon }, dispatch] = useContext(GlobalContext);
@@ -124,12 +100,12 @@ function DetailPage() {
         </div>
         <div className={styles.detail_attribute}>
           <div className={styles.box_detail_attribute}>
-            <Attribute attribute="Weight" value={attributePokemon?.weight} />
-            <Attribute attribute="Height" value={attributePokemon?.height} />
-            <Attribute attribute="Abilities" value={attributePokemon?.abilities} />
-            <Attribute attribute="Types" value={attributePokemon?.types} />
+            <AttributePokemon attribute="Weight" value={attributePokemon?.weight} />
+            <AttributePokemon attribute="Height" value={attributePokemon?.height} />
+            <AttributePokemon attribute="Abilities" value={attributePokemon?.abilities} />
+            <AttributePokemon attribute="Types" value={attributePokemon?.types} />
             {attributePokemon?.stats?.map(stat => {
-              return <Attribute attribute={stat?.nameStats} value={stat?.baseStats} />
+              return <AttributePokemon attribute={stat?.nameStats} value={stat?.baseStats} />
             })}
           </div>
         </div>

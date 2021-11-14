@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import PropTypes from 'prop-types';
 
 import { PokemonActions } from "../../../actions";
 import { GlobalContext } from "../../../contexts/GlobalStateProvider";
@@ -80,5 +81,9 @@ const FilterPokemon = ({ setLoadingList }) => {
     </form>
   )
 }
+
+FilterPokemon.propTypes = {
+  setLoadingList: PropTypes.func.isRequired,
+};
 
 export default FilterPokemon;

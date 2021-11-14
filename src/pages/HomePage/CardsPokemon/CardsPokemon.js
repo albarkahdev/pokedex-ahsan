@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import CardPokemon from '../CardPokemon/CardPokemon';
 import styles from './CardsPokemon.module.css';
 
@@ -12,5 +14,9 @@ const CardsPokemon = ({ pokemons }) => {
     </div>
   )
 }
+
+CardsPokemon.propTypes = {
+  pokemons: PropTypes.array.isRequired,
+};
 
 export default CardsPokemon;
