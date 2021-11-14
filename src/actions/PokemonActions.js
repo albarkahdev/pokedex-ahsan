@@ -106,9 +106,20 @@ async function getMorePokemons({ nextPokemonURL, currentPokemons }, dispatch) {
   }
 }
 
+async function getTypesPokemon() {
+  try {
+    const { data: { results }} = await apiUtil.get('/type');
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getPokemon,
   getPokemons,
   getMorePokemons,
+  getTypesPokemon,
   setPokemon,
 };
