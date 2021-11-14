@@ -22,7 +22,7 @@ const getInstance = (config) => {
       const newConfig = { ...configInstace, ...config };
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
-        console.log(newConfig);
+        // console.log(newConfig);
       }
       return newConfig;
     },

@@ -21,7 +21,7 @@ function dispatchPokemons({ pokemons }, dispatch) {
 
 function dispatchAllPokemonByType({ allPokemonByType }, dispatch) {
   dispatch({
-    type: actionTypes.allPokemonByType,
+    type: actionTypes.SET_ALL_POKEMON_BY_TYPE,
     allPokemonByType,
   });
 }
@@ -30,6 +30,13 @@ function dispatchNextPokemonURL({ nextPokemonURL }, dispatch) {
   dispatch({
     type: actionTypes.SET_NEXT_POKEMON_URL,
     nextPokemonURL,
+  });
+}
+
+function dispatchCurrentTypePokemon({ currentTypePokemon }, dispatch) {
+  dispatch({
+    type: actionTypes.SET_CURRENT_TYPE_POKEMON,
+    currentTypePokemon,
   });
 }
 
@@ -66,6 +73,14 @@ function setNextPokemonURL({ nextPokemonURL }, dispatch) {
 
   dispatchNextPokemonURL(
     { nextPokemonURL }, dispatch,
+  );
+}
+
+function setCurrentTypePokemon({ currentTypePokemon }, dispatch) {
+  if (!currentTypePokemon) return;
+
+  dispatchCurrentTypePokemon(
+    { currentTypePokemon }, dispatch,
   );
 }
 
@@ -131,14 +146,39 @@ async function getTypesPokemon() {
 
 async function getPokemonsByType({ typeId }, dispatch) {
   try {
-    const { data: { results }} = await apiUtil.get(`/type/${typeId}`);
+    const { data: { pokemon }} = await apiUtil.get(`/type/${typeId}`);
 
-    setPokemons({ pokemons: results }, dispatch);
+    setAllPokemonByType({ allPokemonByType: pokemon }, dispatch);
 
-    return results;
+    let firstTen = pokemon.slice(0, 10);
+    firstTen = firstTen.map(itemPokemon => ({ ...itemPokemon?.pokemon }));
+    setPokemons({ pokemons: firstTen }, dispatch);
+
+    return pokemon;
   } catch (error) {
     throw error;
   }
+}
+
+function getMorePokemonsByType({ allPokemonByType, currentPokemons }, dispatch) {
+  const lengthCurrentPokemons = currentPokemons.length;
+  const lengthAllPokemonByType = allPokemonByType.length;
+  const lengthRestPokemon = lengthAllPokemonByType - lengthCurrentPokemons;
+  let nextPokemons = [];
+
+  if (lengthRestPokemon > 10) {
+    nextPokemons = allPokemonByType.slice((lengthCurrentPokemons), (lengthCurrentPokemons + 10));
+  } else {
+    nextPokemons = allPokemonByType.slice((lengthCurrentPokemons), lengthAllPokemonByType);
+  }
+
+  nextPokemons = nextPokemons.map(itemPokemon => ({ ...itemPokemon?.pokemon }));
+
+  const mergePokemonList = currentPokemons.concat(nextPokemons);
+
+  setPokemons({ pokemons: mergePokemonList }, dispatch);
+
+  return mergePokemonList;
 }
 
 export {
@@ -147,5 +187,7 @@ export {
   getMorePokemons,
   getTypesPokemon,
   getPokemonsByType,
+  getMorePokemonsByType,
   setPokemon,
+  setCurrentTypePokemon,
 };

@@ -7,15 +7,19 @@ import { PokemonActions } from "../../actions";
 import styles from './HomePage.module.css';
 
 function HomePage() {
+  const [loadingList, setLoadingList] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [{ pokemons, nextPokemonURL }, dispatch] = useContext(GlobalContext);
+  const [{ pokemons, allPokemonByType, nextPokemonURL, currentTypePokemon }, dispatch] = useContext(GlobalContext);
 
   useEffect(() => {
     const fetchApiPokemons = async () => {
+      setLoadingList(true);
       try {
         const results = await PokemonActions.getPokemons(dispatch);
       } catch (err) {
         console.log({err});
+      } finally {
+        setLoadingList(false);
       }
     };
 
@@ -23,19 +27,29 @@ function HomePage() {
   }, []);
 
   const handleGetMorePokemons = async () => {
-    try {
-      setLoadingMore(true);
-      const result = await PokemonActions.getMorePokemons(
-        {
-          nextPokemonURL,
-          currentPokemons: pokemons,
-        },
-        dispatch
-      );
-    } catch (err) {
-      console.log({err});
-    } finally {
+    setLoadingMore(true);
+    if (currentTypePokemon !== "all") {
+      const results = PokemonActions.getMorePokemonsByType({
+        allPokemonByType,
+        currentPokemons: pokemons,
+      }, dispatch);
+
       setLoadingMore(false);
+      return null;
+    } else {
+      try {
+        const results = await PokemonActions.getMorePokemons(
+          {
+            nextPokemonURL,
+            currentPokemons: pokemons,
+          },
+          dispatch
+        );
+      } catch (err) {
+        console.log({err});
+      } finally {
+        setLoadingMore(false);
+      }
     }
   }
 
@@ -45,21 +59,22 @@ function HomePage() {
         <div className={styles.container}>
           <h1>POKEDEX</h1>
           <Suspense fallback={<p>Loading Filter Types...</p>}>
-            <FilterPokemon />
+            <FilterPokemon setLoadingList={setLoadingList} />
           </Suspense>
           <Suspense fallback={<p>Loading Card Image...</p>}>
-            <CardsPokemon pokemons={pokemons} />
+            {!loadingList && <CardsPokemon pokemons={pokemons} />}
+            {loadingList && <p>Loading List...</p>}
           </Suspense>
         </div>
       </Suspense>
       <div className={styles.footer}>
         {
-        nextPokemonURL && !loadingMore
+        !loadingList && nextPokemonURL && !loadingMore
         ? (<div className={styles.button_load_more} onClick={handleGetMorePokemons}>
             <p>Load more pokemon</p>
           </div>)
-        : loadingMore && pokemons && (<div className={styles.button_load_more_loading}>
-          <p>Loading..</p>
+        : (loadingList || loadingMore) && pokemons && (<div className={styles.button_load_more_loading}>
+          <p>Loading...</p>
         </div>)
         }
       </div>

@@ -6,6 +6,7 @@ export const initialState = {
   pokemons: [],
   allPokemonByType: [],
   nextPokemonURL: null,
+  currentTypePokemon: 'all',
 };
 
 const GlobalStateProvider = ({ children }) => {

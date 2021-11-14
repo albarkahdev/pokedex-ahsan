@@ -3,6 +3,7 @@ export const actionTypes = {
   SET_POKEMONS: 'SET_POKEMONS',
   SET_ALL_POKEMON_BY_TYPE: 'SET_ALL_POKEMON_BY_TYPE',
   SET_NEXT_POKEMON_URL: 'SET_NEXT_POKEMON_URL',
+  SET_CURRENT_TYPE_POKEMON: 'SET_CURRENT_TYPE_POKEMON',
 };
 
 const Reducer = (state, action) => {
@@ -26,6 +27,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         nextPokemonURL: action.nextPokemonURL,
+      };
+    case actionTypes.SET_CURRENT_TYPE_POKEMON:
+      return {
+        ...state,
+        currentTypePokemon: action.currentTypePokemon,
       };
 
     default:
