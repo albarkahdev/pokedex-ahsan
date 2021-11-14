@@ -3,14 +3,6 @@
   background-color: white;
 }
 
-.cards_container {
-  display: flex;
-  margin-top: 16px;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
 .footer {
   display: flex;
   justify-content: center;

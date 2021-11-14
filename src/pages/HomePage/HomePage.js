@@ -2,20 +2,8 @@ import { useEffect, useContext, Suspense, useState } from "react";
 
 import { GlobalContext } from '../../contexts/GlobalStateProvider';
 import { PokemonActions } from "../../actions";
-import CardPokemon from "./CardPokemon/CardPokemon";
+import CardsPokemon from "./CardsPokemon/CardsPokemon";
 import styles from './HomePage.module.css';
-
-const CardsPokemon = ({ pokemons }) => {
-  return (
-    <div className={styles.cards_container}>
-      {pokemons?.map(pokemon => {
-        return (
-            <CardPokemon data={pokemon} />
-        )
-      })}
-    </div>
-  )
-}
 
 function HomePage() {
   const [loadingMore, setLoadingMore] = useState(false);
