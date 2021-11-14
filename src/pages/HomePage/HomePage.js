@@ -1,9 +1,9 @@
-import { useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useContext, Suspense } from "react";
 
 import { GlobalContext } from '../../contexts/GlobalStateProvider';
 import { PokemonActions } from "../../actions";
 import './HomePage.module.css';
+import CardPokemon from "./CardPokemon/CardPokemon";
 
 function HomePage() {
   const [{ pokemons }, dispatch] = useContext(GlobalContext);
@@ -18,17 +18,22 @@ function HomePage() {
       }
     };
 
-    fetchApiPokemons();
-
+  fetchApiPokemons();
   }, []);
 
   return (
-    <div>
-      <p>HomePage</p>
-      <nav>
-        <Link to="/1">Detail</Link>
-      </nav>
-    </div>
+    <Suspense fallback={<p>Loading HomePage...</p>}>
+      <div>
+        <p>HomePage</p>
+        {pokemons.map(pokemon => {
+          return (
+            <Suspense fallback={<p>Loading Card Image...</p>}>
+              <CardPokemon data={pokemon} />
+            </Suspense>
+          )
+        })}
+      </div>
+    </Suspense>
   )
 }
 
