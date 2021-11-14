@@ -19,6 +19,13 @@ function dispatchPokemons({ pokemons }, dispatch) {
   });
 }
 
+function dispatchAllPokemonByType({ allPokemonByType }, dispatch) {
+  dispatch({
+    type: actionTypes.allPokemonByType,
+    allPokemonByType,
+  });
+}
+
 function dispatchNextPokemonURL({ nextPokemonURL }, dispatch) {
   dispatch({
     type: actionTypes.SET_NEXT_POKEMON_URL,
@@ -43,6 +50,14 @@ function setPokemons({ pokemons }, dispatch) {
 
   dispatchPokemons(
     { pokemons }, dispatch,
+  );
+}
+
+function setAllPokemonByType({ allPokemonByType }, dispatch) {
+  if (!allPokemonByType) return;
+
+  dispatchAllPokemonByType(
+    { allPokemonByType }, dispatch,
   );
 }
 
@@ -87,9 +102,7 @@ async function getPokemons(dispatch) {
 
 async function getMorePokemons({ nextPokemonURL, currentPokemons }, dispatch) {
   try {
-    const resultsReq = await apiUtil.get(nextPokemonURL);
-    const results = resultsReq?.data?.results;
-    const next = resultsReq?.data?.next;
+    const { data: { results, next }} = await apiUtil.get(nextPokemonURL);
 
     const mergePokemonList = currentPokemons.concat(results);
 
@@ -116,10 +129,23 @@ async function getTypesPokemon() {
   }
 }
 
+async function getPokemonsByType({ typeId }, dispatch) {
+  try {
+    const { data: { results }} = await apiUtil.get(`/type/${typeId}`);
+
+    setPokemons({ pokemons: results }, dispatch);
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getPokemon,
   getPokemons,
   getMorePokemons,
   getTypesPokemon,
+  getPokemonsByType,
   setPokemon,
 };

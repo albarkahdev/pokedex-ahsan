@@ -1,6 +1,7 @@
 export const actionTypes = {
   SET_POKEMON: 'SET_POKEMON',
   SET_POKEMONS: 'SET_POKEMONS',
+  SET_ALL_POKEMON_BY_TYPE: 'SET_ALL_POKEMON_BY_TYPE',
   SET_NEXT_POKEMON_URL: 'SET_NEXT_POKEMON_URL',
 };
 
@@ -15,6 +16,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         pokemons: action.pokemons,
+      };
+    case actionTypes.SET_ALL_POKEMON_BY_TYPE:
+      return {
+        ...state,
+        allPokemonByType: action.allPokemonByType,
       };
     case actionTypes.SET_NEXT_POKEMON_URL:
       return {

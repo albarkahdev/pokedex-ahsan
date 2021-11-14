@@ -4,6 +4,7 @@ import Reducer from '../reducers/reducer';
 export const initialState = {
   pokemon: {},
   pokemons: [],
+  allPokemonByType: [],
   nextPokemonURL: null,
 };
 
