@@ -6792,6 +6792,11 @@ jsprim@^1.2.2:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
+ka-table@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/ka-table/-/ka-table-7.3.0.tgz#a76564de2fbc709b29cb9d2b23a3e67b604e75d5"
+  integrity sha512-cDIsZSDI8B2W9sJQl5hgtoCQsJvUSlxj2LTk8SaSYGdMse3ToRC8LoC27QqbRzy7x4n92yV4/wzrTesGguNlqA==
+
 killable@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
